@@ -6,6 +6,9 @@ use Illuminate\Support\Str;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
@@ -16,6 +19,8 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -34,13 +39,14 @@ class CategoryResource extends Resource
                     Grid::make()->schema([
                         TextInput::make('name')
                             ->label('Название категории')
-                            ->live()
-                            ->afterStateUpdated(fn(string $operation, $state, Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (string $operation, $state, Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null)
                             ->required(),
                         TextInput::make('slug')
                             ->maxLength(255)
                             ->label('URL - ссылка')
                             ->disabled()
+                            ->dehydrated()
                             ->unique(Category::class, 'slug', ignoreRecord: true)
                             ->required(),
                         FileUpload::make('image')
@@ -60,13 +66,24 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('slug'),
+                ImageColumn::make('image'),
+                TextColumn::make('created_at')
+                    ->sortable()
+                    ->date()
+                    ->toggleable(isToggledHiddenByDefault:true),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
