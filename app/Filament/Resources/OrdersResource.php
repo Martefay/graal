@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrdersResource\Pages;
-use App\Filament\Resources\OrdersResource\RelationManagers;
+use App\Filament\Resources\OrdersResource\RelationManagers\AddressRelationManager;
 use App\Models\Order;
 use App\Models\Product;
 use Filament\Forms;
@@ -19,6 +19,7 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\SelectColumn;
@@ -227,15 +228,16 @@ class OrdersResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AddressRelationManager::class,
         ];
     }
+
     // Отображение кол-во записей
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-
+    // Отображение цвета для ярлыка
     public static function getNavigationBadgeColor(): string|array|null
     {
         return static::getModel()::count() >= 10 ? 'danger' : 'success';
