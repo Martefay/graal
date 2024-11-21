@@ -21,6 +21,8 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -149,7 +151,7 @@ class OrdersResource extends Resource
                                     ->required(),
                             ])
                     ])->columnSpanFull(),
-                    Placeholder::make('grand_total')
+                    Placeholder::make('grand_total_placeholder')
                         ->label('Общая сумма заказа')
                         ->content(function (Get $get, Set $set){
                             $total = 0; 
@@ -159,7 +161,7 @@ class OrdersResource extends Resource
                             foreach($repeaters as $key => $repeater){
                                 $total += $get("items.{$key}.total_amount");
                             }
-
+                            $set('grand_total', $total);
                             return Number::currency($total, 'RUB');
                         })
                 ]),
@@ -171,7 +173,43 @@ class OrdersResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('user.name')
+                    ->label('Покупатель')
+                    ->sortable()
+                    ->searchable(),
+                SelectColumn::make('status')
+                    ->label('Статус заказа')
+                    ->sortable()
+                    ->options([
+                        'new' => 'Новый',
+                        'processing' => 'Обработка',
+                        'shipping' => 'Ожидает',
+                        'delivered' => 'Доставлен',
+                        'canceled' => 'Отменен'
+                    ]),
+                TextColumn::make('grand_total')
+                    ->label('Общая сумма заказа')
+                    ->numeric()
+                    ->sortable(),
+                SelectColumn::make('pay_method')
+                    ->label('Способ оплаты')
+                    ->sortable()
+                    ->searchable()
+                    ->options([
+                        'stripe' => 'Оплата картой',
+                        'cod' => 'Оплата при получении'
+                    ]),
+                SelectColumn::make('shipping_method')
+                    ->label('Тип доставки')
+                    ->sortable()
+                    ->searchable()
+                    ->options([
+                        'russian' => 'Почта России',
+                        'delov' => 'Деловые линии',
+                        'sdek' => 'СДЭК',
+                        'pel' => 'ПЭК',
+                        'nefr' => 'НЕФР'
+                    ]),
             ])
             ->filters([
                 //
@@ -191,6 +229,16 @@ class OrdersResource extends Resource
         return [
             //
         ];
+    }
+    // Отображение кол-во записей
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return static::getModel()::count() >= 10 ? 'danger' : 'success';
     }
 
     public static function getPages(): array
