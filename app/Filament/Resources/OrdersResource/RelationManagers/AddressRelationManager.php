@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\OrdersResource\RelationManagers;
 
+use Faker\Provider\ar_EG\Text;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -18,9 +21,36 @@ class AddressRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                TextInput::make('first_name')
+                    ->label('Имя')
+                    ->maxLength(255)
+                    ->required(),
+                TextInput::make('last_name')
+                    ->label('Фамилия')
+                    ->maxLength(255)
+                    ->required(),
+                TextInput::make('phone')
+                    ->label('Номер телефона')
+                    ->tel()
+                    ->maxLength(11)
+                    ->required(), 
+                TextInput::make('zip_code')
+                    ->label('Почтовый индекс')
+                    ->required()
+                    ->numeric()
+                    ->maxLength(255),
+                TextInput::make('city')
+                    ->label('Город')
+                    ->maxLength(255)
+                    ->required(),
                 Forms\Components\TextInput::make('street')
+                    ->label('Улица')
                     ->required()
                     ->maxLength(255),
+                TextInput::make('home')
+                    ->label('Номер дома')
+                    ->maxLength(255)
+                    ->required(),
             ]);
     }
 
@@ -29,7 +59,20 @@ class AddressRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('street')
             ->columns([
-                Tables\Columns\TextColumn::make('street'),
+                TextColumn::make('first_name')
+                    ->label('Имя'),
+                TextColumn::make('last_name')
+                    ->label('Фамилия'),
+                TextColumn::make('phone')
+                    ->label('Номер телефона')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('city')
+                    ->label('Город'),
+                TextColumn::make('street')
+                    ->label('Улица'),
+                TextColumn::make('home')
+                    ->label('Номер дома'),
             ])
             ->filters([
                 //
