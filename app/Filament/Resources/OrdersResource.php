@@ -40,124 +40,132 @@ class OrdersResource extends Resource
                     Section::make('Информация о заказе')->schema([
                         Select::make('user_id')
                             ->label('Покупатель')
-                            ->helperText('Список пользователей')
-                            ->relationship("user", "name")
-                            ->searchable()
                             ->preload()
+                            ->helperText('Список пользователей')
+                            ->relationship('user', 'name')
+                            ->searchable()
                             ->required(),
                         Select::make('pay_method')
                             ->options([
-                                'stripe' => "Оплата картой",
-                                "cod" => "Оплата при получении"
+                                'stripe' => 'Оплата картой',
+                                'cod' => 'Оплата при получении'
                             ])
                             ->label('Тип оплаты')
                             ->helperText('Выберите тип оплаты')
                             ->required(),
-                        Select::make('pay_status')->options([
-                                "success" => "Оплачено",
-                                "pending" => "В обработке",
-                                "failed" => "Отказано"
+                        Select::make('pay_status')
+                            ->options([
+                                'success' => 'Оплачено',
+                                'pending' => 'В обработке',
+                                'failed' => 'Отказано'
                             ])
-                            ->default('pending')
                             ->label('Статус оплаты')
+                            ->default('pending')
                             ->helperText('Выберите статус оплаты')
                             ->required(),
                         ToggleButtons::make('status')
-                            ->options([
-                                "new" => "Новый",
-                                "processing" => "Обработка",
-                                "shipeed" => "Ожидает",
-                                "delivered" => "Доставлен",
-                                "canceled" => "Отменен",
-                            ])
-                            ->colors([
-                                "new" => "info",
-                                "processing" => "warning",
-                                "shipeed" => "success",
-                                "delivered" => "success",
-                                "canceled" => "danger",
-                            ])
-                            ->icons([
-                                "new" => "heroicon-m-sparkles",
-                                "processing" => "heroicon-m-arrow-path",
-                                "shipeed" => "heroicon-m-clock",
-                                "delivered" => "heroicon-m-truck",
-                                "canceled" => "heroicon-m-no-symbol",
-                            ])
-                            ->label('Статус')
-                            ->default('new')
-                            ->inline(),
-                        Select::make('currency')->options([
-                                "rub" => "Руб.",
-                                "usd" => "Доллар",
-                                "eur" => "Евро",
-                                "dol" => "Долгих",
-                            ])
-                            ->label('Валюта оплаты')
-                            ->helperText('Выберите валюту для оплаты'),
-                        Select::make('shipping_method')->options([
-                            "sdek" => "СДЭК",
-                            "pek" => "ПЭК",
-                            "nefr" => "НЕФР",
-                        ])
-                        ->label('Доставка'),
-                        Textarea::make("notes")
-                            ->label("Примечания")
-                            ->helperText("Например: осторожно, хрупкий груз")
+                                ->options([
+                                    'new' => 'Новый',
+                                    'processing' => 'Обработка',
+                                    'shipping' => 'Ожидает',
+                                    'delivered' => 'Доставлен',
+                                    'canceled' => 'Отменен'
+                                ])
+                                ->colors([
+                                    'new' => 'info',
+                                    'processing' => 'warning',
+                                    'shipping' => 'success',
+                                    'delivered' => 'success',
+                                    'canceled' => 'danger'
+                                ])
+                                ->icons([
+                                    'new' => 'heroicon-o-sparkles',
+                                    'processing' => 'heroicon-o-clock',
+                                    'shipping' => 'heroicon-o-truck',
+                                    'delivered' => 'heroicon-o-archive-box',
+                                    'canceled' => 'heroicon-o-archive-box-x-mark'    
+                                ])
+                                ->label('Статус заказа')
+                                ->default('new')
+                                ->helperText('Выберите статус заказа')
+                                ->required()
+                                ->inline(),
+                            Select::make('currency')
+                                ->options([
+                                    'rub' => 'Рубль',
+                                    'usd' => 'Доллар',
+                                    'eur' => 'Евро',
+                                     
+                                ])
+                                ->label('Валюта оплаты')
+                                ->helperText('Выберите валюту для оплаты'),
+                            Select::make('shipping_method')
+                                ->options([
+                                    'russian' => 'Почта России',
+                                    'delov' => 'Деловые линии',
+                                    'sdek' => 'СДЭК',
+                                    'pel' => 'ПЭК',
+                                    'nefr' => 'НЕФР'
+                                ])
+                                ->label("Доставка")
+                                ->helperText('Выберите тип доставки'),
+                            Textarea::make('notes')
+                            ->label('примечания')
+                            ->helperText('Например: осторожно, хрупкий сердце')
                     ])->columnSpanFull(),
-                    Section::make("Список товаров")->schema([
-                        Repeater::make("items")
+                    Section::make('Список товаров')->schema([
+                        Repeater::make('items')
                             ->label('Позиция товара')
                             ->relationship()
                             ->schema([
-                                Select::make("product_id")
+                                Select::make('product_id')
                                     ->label('Товар')
-                                    ->helperText("Выберите товар")
-                                    ->relationship("product", "name")
+                                    ->helperText('Выберите товар')
+                                    ->relationship('product', 'name')
                                     ->preload()
                                     ->searchable()
                                     ->reactive()
-                                    ->required()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)?-> price ?? 0 ))
-                                    ->afterStateUpdated(fn ($state, Set $set) => $set('total_amount', Product::find($state)?-> price ?? 0 )),
-                                TextInput::make("quantity")
-                                    ->label('Укажите кол-во')
+                                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)?-> price ?? 0))
+                                    ->afterStateUpdated(fn ($state, Set $set) => $set('total_amount', Product::find($state)?-> price ?? 0))
+                                    ->required(),
+                                TextInput::make('quanity')
+                                    ->label('Укажите колл-во')
                                     ->numeric()
                                     ->default(1)
                                     ->minValue(1)
                                     ->reactive()
-                                    ->afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state * $get('unit_amount')))
+                                    ->afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state*$get('unit_amount')))
                                     ->required(),
-                                TextInput::make("unit_amount")
+                                TextInput::make('unit_amount')
+                                    ->label('Цена за еденицу')
                                     ->numeric()
-                                    ->label('Цена за шт.')
                                     ->disabled()
                                     ->required(),
-                                TextInput::make("total_amount")
+                                TextInput::make('total_amount')
                                     ->label('Общая сумма')
-                                    ->numeric()
                                     ->disabled()
+                                    ->numeric()
                                     ->required(),
                             ])
                     ])->columnSpanFull(),
-
                     Placeholder::make('grand_total')
                         ->label('Общая сумма заказа')
                         ->content(function (Get $get, Set $set){
-                            $total = 0;
-                            if(!$repetears = $get('items')) {
+                            $total = 0; 
+                            if(!$repeaters = $get('items')){
                                 return $total;
                             }
-                            foreach($repetears as $key => $repetear) {
+                            foreach($repeaters as $key => $repeater){
                                 $total += $get("items.{$key}.total_amount");
                             }
 
                             return Number::currency($total, 'RUB');
-                        }),
+                        })
                 ]),
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
