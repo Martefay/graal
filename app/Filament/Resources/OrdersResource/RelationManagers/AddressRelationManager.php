@@ -59,10 +59,8 @@ class AddressRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('street')
             ->columns([
-                TextColumn::make('first_name')
+                TextColumn::make('fullname')
                     ->label('Имя'),
-                TextColumn::make('last_name')
-                    ->label('Фамилия'),
                 TextColumn::make('phone')
                     ->label('Номер телефона')
                     ->sortable()
