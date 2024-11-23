@@ -75,7 +75,7 @@ class OrdersRelationManager extends RelationManager
                 //
             ])
             ->actions([
-                Action::make('View Order')
+                Action::make('Подробнее о заказе')
                     ->url(fn (Order $record):string => OrdersResource::getUrl('view', ['record' => $record]))
                     ->color('info')
                     ->icon('heroicon-o-eye'),

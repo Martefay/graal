@@ -265,8 +265,8 @@ class OrdersResource extends Resource
     {
         return [
             'index' => Pages\ListOrders::route('/'),
-            'view' => ViewOrders::route('/{record}'),
             'create' => Pages\CreateOrders::route('/create'),
+            'view' => Pages\ViewOrders::route('/{record}'),
             'edit' => Pages\EditOrders::route('/{record}/edit'),
         ];
     }
