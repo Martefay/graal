@@ -3,12 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrdersResource\Pages;
+use App\Filament\Resources\OrdersResource\Pages\ViewOrders;
 use App\Filament\Resources\OrdersResource\RelationManagers\AddressRelationManager;
 use App\Models\Order;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
@@ -116,56 +118,72 @@ class OrdersResource extends Resource
                             ->label('примечания')
                             ->helperText('Например: осторожно, хрупкий сердце')
                     ])->columnSpanFull(),
-                    Section::make('Список товаров')->schema([
+                    Section::make('Order Items')->schema([
                         Repeater::make('items')
-                            ->label('Позиция товара')
                             ->relationship()
                             ->schema([
+
                                 Select::make('product_id')
-                                    ->label('Товар')
-                                    ->helperText('Выберите товар')
                                     ->relationship('product', 'name')
-                                    ->preload()
                                     ->searchable()
-                                    ->reactive()
+                                    ->preload()
+                                    ->required()
+                                    ->distinct()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)?-> price ?? 0))
-                                    ->afterStateUpdated(fn ($state, Set $set) => $set('total_amount', Product::find($state)?-> price ?? 0))
-                                    ->required(),
-                                TextInput::make('quanity')
-                                    ->label('Укажите колл-во')
+                                    ->columnSpan(4)
+                                    ->reactive()
+                                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', optional(Product::find($state))->price ?? 0))
+
+                                    ->afterStateUpdated(fn ($state, Set $set) => $set('total_amount', optional(Product::find($state))->price ?? 0)),
+
+                                
+                                TextInput::make('quantity')
                                     ->numeric()
+                                    ->required()
                                     ->default(1)
                                     ->minValue(1)
+                                    ->columnSpan(2)
                                     ->reactive()
-                                    ->afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state*$get('unit_amount')))
-                                    ->required(),
+                                    ->afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state*$get('unit_amount'))),
+                                
                                 TextInput::make('unit_amount')
-                                    ->label('Цена за еденицу')
                                     ->numeric()
+                                    ->required()
                                     ->disabled()
-                                    ->required(),
+                                    ->dehydrated()
+                                    ->columnSpan(3),
+                                
                                 TextInput::make('total_amount')
-                                    ->label('Общая сумма')
-                                    ->disabled()
                                     ->numeric()
-                                    ->required(),
-                            ])
-                    ])->columnSpanFull(),
-                    Placeholder::make('grand_total_placeholder')
-                        ->label('Общая сумма заказа')
-                        ->content(function (Get $get, Set $set){
-                            $total = 0; 
-                            if(!$repeaters = $get('items')){
-                                return $total;
-                            }
-                            foreach($repeaters as $key => $repeater){
-                                $total += $get("items.{$key}.total_amount");
-                            }
-                            $set('grand_total', $total);
-                            return Number::currency($total, 'RUB');
-                        })
-                ]),
+                                    ->required()
+                                    ->dehydrated()
+                                    ->columnSpan(3)
+
+                            ])->columns(12),
+
+                            Placeholder::make('grand_total_placeholder')
+                                ->label('Grand Total')
+                                ->content(function (Get $get, Set $set){
+                                    $total = 0;
+                                    if(!$repeaters = $get('items')){
+                                        return $total;
+                                    }
+
+                                    foreach($repeaters as $key => $reapeater) {
+                                        $total += $get("items.{$key}.total_amount");
+                                    }
+
+                                    $set('grand_total', $total);
+                                    return \Illuminate\Support\Number::currency($total, 'INR');
+                                }),
+
+
+                            Hidden::make('grand_total')
+                                ->default(0)
+
+                    ]),
+
+                ])->columnSpanFull(),
             ]);
     }
 
@@ -247,6 +265,7 @@ class OrdersResource extends Resource
     {
         return [
             'index' => Pages\ListOrders::route('/'),
+            'view' => ViewOrders::route('/{record}'),
             'create' => Pages\CreateOrders::route('/create'),
             'edit' => Pages\EditOrders::route('/{record}/edit'),
         ];
