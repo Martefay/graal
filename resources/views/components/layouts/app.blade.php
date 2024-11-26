@@ -6,10 +6,14 @@
 
         <title>{{ $title ?? 'Интернет магазин' }}</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        {{-- Подключение стилей livewire --}}
+        @livewireStyles
     </head>
     <body class="bg-gray-100 text-gray-900">
         <main id="main">
             {{ $slot }}
         </main>
+        {{-- Подключение скриптов livewire --}}
+        @livewireScripts
     </body>
 </html>
