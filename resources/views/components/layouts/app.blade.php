@@ -10,9 +10,11 @@
         @livewireStyles
     </head>
     <body class="bg-gray-100 text-gray-900">
+        <livewire:partials.header />
         <main id="main">
             {{ $slot }}
         </main>
+        <livewire:partials.footer />
         {{-- Подключение скриптов livewire --}}
         @livewireScripts
     </body>
