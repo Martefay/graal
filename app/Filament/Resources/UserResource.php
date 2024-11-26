@@ -29,7 +29,13 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = "name";
 
+    protected static ?string $navigationLabel = "Пользователи";
+
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    
+    protected static ?string $modelLabel = 'Пользователь';
+    
+    protected static ?string $pluralModelLabel = 'Пользователи';
 
     public static function form(Form $form): Form
     {
