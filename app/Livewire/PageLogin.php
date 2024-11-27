@@ -5,11 +5,11 @@ namespace App\Livewire;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title('Контакты')]
-class PageContacts extends Component
+#[Title('Вход в личный кабинет')]
+class PageLogin extends Component
 {
     public function render()
     {
-        return view('livewire.page-contacts');
+        return view('livewire.page-login');
     }
 }
