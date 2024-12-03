@@ -1,9 +1,12 @@
 @props(['product'])
 <div>
-    <a href="">
+    <img class="w-full h-[230px] object-cover" src="{{ url('storage', $product->images[0]) }}" alt="">
+    <a href="{{ route('page.category-product', $product->category_id) }}">
         <span class="text-sm text-gray-500">{{ $product->category->name }}</span>
     </a>
-    <h2 class="text-blue-700">{{ $product->name }}</h2>
+    <a href="{{ route('single.product', $product->slug) }}">
+        <h2 class="text-blue-700">{{ $product->name }}</h2>
+    </a>
     @if($product->is_stock === 1)
         @if($product->is_sale === 1)
         {{-- доделать формулу --}}

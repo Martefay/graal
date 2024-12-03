@@ -1,5 +1,5 @@
 @props(['products'])
-<ul class="grid grid-col-3 gap-4">
+<ul class="grid grid-cols-5 gap-4 mt-10">
     @if (!$products->isEmpty())
         @foreach ($products as $product)
             <li class="w-full h-full">
