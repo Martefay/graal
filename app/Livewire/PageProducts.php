@@ -8,10 +8,13 @@ use App\Models\Product;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Title('Товары')]
 class PageProducts extends Component
 {
+
+    use WithPagination;
 
     #[Url]
     public $selected_categories = [];
@@ -23,10 +26,25 @@ class PageProducts extends Component
     public $featured;
 
     #[Url]
+    public $sale;
+
+    #[Url]
     public $price_range = 1000000;
 
     #[Url]
     public $sort = 'latest';
+
+
+    public function resetFilters()
+    {
+        $this->selected_categories = [];
+        $this->selected_brands = [];
+        $this->featured = null;
+        $this->sale = null;
+        $this->price_range = 1000000;
+        $this->sort = 'latest';
+        $this->render();
+    }
 
     public function render()
     {
@@ -42,6 +60,25 @@ class PageProducts extends Component
 
         if($this->featured) {
             $products->where("is_featured", 1);
+        }
+
+        if($this->sale)
+        {
+            $products->where("is_sale", 1);
+        }
+
+        if($this->price_range)
+        {
+            $products->whereBetween("price", [0, $this->price_range]);
+        }
+
+        if($this->sort == "latest")
+        {
+            $products->orderBy("updated_at", "DESC");
+        }
+        if($this->sort == "price")
+        {
+            $products->orderBy("price", "ASC");
         }
 
         return view('livewire.page-products', [
