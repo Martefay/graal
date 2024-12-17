@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>{{ $title ?? 'Интернет магазин' }}</title>
+        @stack('meta')
         <script src="https://cdn.tailwindcss.com"></script>
         {{-- Подключение стилей livewire --}}
         @livewireStyles

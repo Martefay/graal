@@ -62,6 +62,7 @@
     <div class="w-full py-5">
         Товары
         <x-product.product-group :products="$products" />
+        {{-- Вывод пагинации --}}
         {{ $products->links() }}
     </div>
 </div>

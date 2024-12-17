@@ -8,6 +8,7 @@ use Livewire\Component;
 class SingleProduct extends Component
 {
     public $slug;
+    public $description;
 
     public function mount($slug)
     {
@@ -17,9 +18,10 @@ class SingleProduct extends Component
     public function render()
     {
         $product = Product::where("slug", $this->slug)->firstOrFail();
+        $this->description = $product->description;
         return view('livewire.single-product', [
             'product' => $product,
         ]);
     }
 }
- 
+  
