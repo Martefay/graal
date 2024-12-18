@@ -17,5 +17,8 @@
     @else
         <span class="text-sm">Товар закончился</span>
     @endif
-    <button class="bg-blue-700 px-4 py-2 rouned-md text-white font-medium">Добавить в корзину</button>
+    <button wire:click="addToCart({{ $product->id }})" class="bg-blue-700 px-4 py-2 rouned-md text-white font-medium">
+        <span wire:loading.remove>Добавить в корзину</span>
+        <span wire:loading>Загрузка</span>
+    </button>
 </div>

@@ -19,7 +19,13 @@
         </nav>
         <ul class="ml-6 flex items-center gap-6">
             <li class="inline-flex">
-                <a href="" class="font-semibold">Корзина</a>
+                <a href="" class="font-semibold">
+                    @if ($total_count === 0)
+                       Корзина пустая 
+                    @else
+                        Коризна {{ $total_count }}
+                    @endif
+                </a>
             </li>
             <li class="inline-flex">
                 <a href="" class="px-4 py-2 rounded-md bg-blue-600 font-semibold text-white">Войти</a>

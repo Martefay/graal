@@ -5,7 +5,7 @@ namespace App\Helpers;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cookie;
 
-class CartManagement
+class CartManagment
 {
     static public function addItemToCart($product_id)
     {
@@ -89,7 +89,7 @@ class CartManagement
         self::addCartItemsToCookie($cart_items);
         return $cart_items;
     }
-W
+    
     static public function decrementQuantityToCartItem($product_id)
     {
         $cart_items = self::getCartItemsFromCookie();
