@@ -1,14 +1,11 @@
 @props(['products'])
-<ul class="grid grid-cols-5 gap-4 mt-10">
-    @if (!$products->isEmpty())
+<ul class="grid grid-cols-2 gap-4 md:grid-cols-4">
+   
         @foreach ($products as $product)
             <li class="w-full h-full">
-                <x-product.product-card :product="$product" />
+                <x-product.product-card :products="$products" />
             </li>
         @endforeach
-    @else
-        <div class="col-span-3">
-            <p class="text-lg">Товары не найдены</p>
-        </div>
-    @endif
+
+
 </ul>

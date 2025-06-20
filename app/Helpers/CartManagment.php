@@ -89,7 +89,7 @@ class CartManagment
         self::addCartItemsToCookie($cart_items);
         return $cart_items;
     }
-    
+
     static public function decrementQuantityToCartItem($product_id)
     {
         $cart_items = self::getCartItemsFromCookie();

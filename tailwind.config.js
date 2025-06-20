@@ -1,6 +1,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
+
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -10,9 +11,17 @@ export default {
         './resources/**/*.vue',
     ],
     theme: {
+        colors: {
+            transparent: 'transparent',
+            current: 'currentColor',
+           'accent': '#660066',
+        },
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                extrabold: ['Montserrat', 'extrabold'],
+                light: ['Montserrat', 'light'],
+                medium: ['Montserrat', 'medium'],
+                regular: ['Montserrat', 'regular']
             },
         },
     },

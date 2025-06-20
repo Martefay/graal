@@ -2,18 +2,25 @@
 
 namespace App\Livewire;
 
+use App\Helpers\CartManagment;
+use App\Livewire\Partials\Header;
+use App\Models\Category;
 use App\Models\Product;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 #[Title('Главная')]
 class PageHome extends Component
 {
+
+
     public function render()
     {
-        $products = Product::where("is_active", 1)->where('is_featured', 1)->orderBy("updated_at", "DESC")->paginate(10);
+        $categories = Category::paginate(4);
         return view('livewire.page-home', [
-            'products' => $products,
+            'categories' => $categories,
         ]);
     }
+    
 }

@@ -2,30 +2,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Address extends Model
+class address extends Model
 {
-    use HasFactory;
+    protected $table = 'addresses';
+    
+    /**
+     * Определение отношения к контакту
+     */
+    public function contact(): BelongsTo
+    {
+        // Если внешний ключ в таблице phones называется 'contact_id' (стандартное соглашение)
+        return $this->belongsTo(ContactHeader::class);
+        
+        // ИЛИ если вы используете кастомное имя внешнего ключа:
+        // return $this->belongsTo(ContactHeader::class, 'contact_header_id');
+    }
+    
+    /**
+     * Массово назначаемые атрибуты
+     */
     protected $fillable = [
-        'order_id',
-        'first_name',
-        'last_name',
-        'phone',
-        'city',
-        'street',
-        'home',
-        'zip_code'
+        'place',
+        'link',
+        'contact_id', // или 'contact_header_id' в зависимости от вашей структуры
     ];
-
-    public function order()
-    {
-        return $this->belongsTo(Order::class);
-    }
-
-    public function getFullNameAttribute()
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
+    
+    /**
+     * Приведение типов атрибутов
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 }

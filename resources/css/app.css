@@ -1,3 +1,28 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+
+/* @layer base {
+    @font-face {
+        font-family: 'MONTSERRAT-ExtraBold';
+        src: url('/resources/assets/fonts/Montserrat/Montserrat-ExtraBold.ttf');
+    }
+    
+    @font-face {
+        font-family: 'MONTSERRAT-Light';
+        src: url('/resources/assets/fonts/Montserrat/Montserrat-Light.ttf');
+    }
+    
+    @font-face {
+        font-family: 'MONTSERRAT-Medium';
+        src: url('/resources/assets/fonts/Montserrat/Montserrat-Medium.ttf');
+    }
+    
+    @font-face {
+        font-family: 'MONTSERRAT-Regular';
+        src: url('/resources/assets/fonts/Montserrat/Montserrat-Regular.ttf');
+    }
+    
+} */
+
+body {
+    background-color: black;
+}

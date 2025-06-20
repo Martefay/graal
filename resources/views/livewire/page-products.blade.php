@@ -1,68 +1,77 @@
-<div class="max-w-7xl mx-auto px-4">
-    <div class="w-full py-5">
-        Фильтры
-        <div class="w-full">
-            {{-- Фильтр категорий --}}
-            <div class="">
-                <div class="text-lg font-semibold uppercase text-gray-800">Категории</div>
-                @foreach ($categories as $category)
-                    <label wire:key="{{ $category->id }}" for="{{ $category->slug }}">
-                        <input wire:model.live="selected_categories" type="checkbox" id="{{ $category->slug }}" value="{{ $category->id }}">
-                        <span>{{ $category->name }}</span>
-                    </label>
-                @endforeach
-            </div>
-            {{-- Фильтр по брендам --}}
-            <div class="">
-                <div class="text-lg font-semibold uppercase text-gray-800">Бренды</div>
-                @foreach ($brands as $brand)
-                <label for="{{ $brand->slug }}">
-                    <input wire:model.live="selected_brands" type="checkbox" id="{{ $brand->slug }}" value="{{ $brand->id }}">
-                    <span>{{ $brand->name }}</span>
-                </label>
-                @endforeach
-            </div>
-            {{-- Фильтр по популярности --}}
-            <div class="">
-                <div class="text-lg font-semibold uppercase text-gray-800">Популярный товар</div>
-                <label for="is_featured">
-                    <input wire:model.live="featured" type="checkbox" id="is_featured" value="1">
-                    <span>Да</span>
-                </label>
-            </div>
-             {{-- Фильтр по акциям --}}
-             <div class="">
-                <div class="text-lg font-semibold uppercase text-gray-800">Участвует в скидке</div>
-                <label for="is_sale">
-                    <input wire:model.live="sale" type="checkbox" id="is_sale" value="1">
-                    <span>Да</span>
-                </label>
-            </div>
-            {{-- Фильтр по цене --}}
-            <div class="">
-                <div class="text-lg font-semibold uppercase text-gray-800">Цена</div>
-                <label for="">
-                    <input wire:model.live="price_range" type="range" max="530000" value="12000" step="30000" id="" value="0">
-                    <span>{{ Number::currency($price_range, 'RUB') }}</span>
-                </label>
-            </div>
-            {{-- сортировка --}}
-            <div class="">
-                <div class="text-lg font-semibold uppercase text-gray-800">Сортировать по</div>
-                <select wire:model.live="sort" name="" id="">
-                    <option value="latest">Сначала новые</option>
-                    <option value="price">Сначала недорогие</option>
-                </select>
-            </div>
-            <div>
-                <button wire:click="resetFilters" class="px-4 py-2 bg-blue-500 text-white text-center">Сбросить фильтры</button>
-            </div>
+<main id="dontfixMe" class="pb-[100px] pt-[50px] bg-[#030808]">
+    
+        <div id="button-uptogo" class=" uptogo backdrop-blur-sm bg-black/50 fixed flex right-20 bottom-[10%] text-[24px] hidden border border-[#FFDBA9] hover:bg-[#FFDBA9] hover:text-black transition duration-250 cursor-pointer p-4">
+            <i class='bx bxs-chevron-up'></i>
         </div>
-    </div>
-    <div class="w-full py-5">
-        Товары
-        <x-product.product-group :products="$products" />
-        {{-- Вывод пагинации --}}
-        {{ $products->links() }}
-    </div>
-</div>
+        <div class="container mx-auto">
+            <div class="max-sm:flex flex-col items-center text-center">
+            <h1 class="font-medium text-[42px]">Меню</h1>
+            <p class="font-light text-[24px] mb-4 text-[#A5A8AB]">Подробная информация о услугах и ценах, вы можете записатся или приехать лично</p>
+        </div>
+            <ul id="dontfixMe-menu" class="flex flex-col gap-8">
+            {{-- <li id="cold" class="mt-[30px]">
+                <div class="w-full flex items-center pl-2 h-[50px] bg-[#FFDBA9]">
+                    
+                </div>
+                <div class="w-full flex p-2 font-medium">
+                    <span class="w-[80%]">Наименование</span>
+                    <div class="flex gap-10">
+                        <span>Выход, гр</span>
+                        <span>Цена, руб</span>
+                    </div>
+                </div>
+                <div class="">
+                    <ul class="">
+                        <li class="flex border-t border-[#FFDBA9] p-2">
+                            <p class="w-[80%]">Бутерброд/тарталетки с икрой (3 шт.)</p>
+                            <div class="flex gap-14">
+                            <p class="text-center">30/45/30</p>
+                            <p class="text-center">690</p>
+                        </div>
+                        </li>
+
+                        <li class="flex border-t border-[#FFDBA9] p-2">
+                            <p class="w-[80%]">Бутерброд/тарталетки с икрой (3 шт.)</p>
+                            <div class="flex gap-15">
+                            <p class="text-center">30/45/30</p>
+                            <p class="text-center">690</p>
+                        </div>
+                        </li>
+
+                        <li class="flex border-t border-[#FFDBA9] p-2">
+                            <p class="w-[80%]">Бутерброд/тарталетки с икрой (3 шт.)</p>
+                            <div class="flex gap-15">
+                            <p class="text-center">30/45/30</p>
+                            <p class="text-center">690</p>
+                        </div>
+                        </li>
+
+                        <li class="flex border-t border-[#FFDBA9] p-2">
+                            <p class="w-[80%]">Бутерброд/тарталетки с икрой (3 шт.)</p>
+                            <div class="flex gap-15">
+                            <p class="text-center">30/45/30</p>
+                            <p class="text-center">690</p>
+                        </div>
+                        </li>
+
+                        <li class="flex border-t border-[#FFDBA9] p-2">
+                            <p class="w-[80%]">Бутерброд/тарталетки с икрой (3 шт.)</p>
+                            <div class="flex gap-15">
+                            <p class="text-center">30/45/30</p>
+                            <p class="text-center">690</p>
+                        </div>
+                        </li>
+                    </ul>
+                </div>
+            </li> --}}
+            {{-- <x-categorymenu.categorymenu-list :categorymenu="$categorymenus" /> --}}
+            
+        <x-categorymenu.categorymenu-list :categorymenus="$categorymenus" />
+
+       
+  
+            {{-- <livewire:page-products :id="$menu->id" />
+                <livewire:page-products :menu-id="$id" /> --}}
+        </ul>
+        </div>
+    </main>

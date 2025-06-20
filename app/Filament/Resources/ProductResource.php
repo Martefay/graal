@@ -14,6 +14,7 @@ use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -23,6 +24,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Markdown;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -33,13 +35,13 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationLabel = 'Товары';
+    protected static ?string $navigationLabel = 'Модели';
+
+    protected static ?string $modelLabel = 'Модель';
+
+    protected static ?string $pluralModelLabel = 'Модели';
 
     protected static ?string $navigationIcon = 'heroicon-o-device-phone-mobile';
-
-    protected static ?string $modelLabel = 'Товар';
-    
-    protected static ?string $pluralModelLabel = 'Товары';
 
     public static function form(Form $form): Form
     {
@@ -49,28 +51,18 @@ class ProductResource extends Resource
                     Section::make('Основная информация')->schema([
                         TextInput::make('name')
                             ->label('Название товара')
-                            ->placeholder('Iphone 16 pro max')
-                            ->helperText('Например: Iphone 16 pro max')
+                            ->placeholder('Сумка-шоппер')
+                            ->helperText('Например: Сумка-шоппер')
                             ->maxLength(255)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(fn (string $operation, $state, Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null)
                             ->required(),
-                        TextInput::make('slug')
-                            ->maxLength(255)
-                            ->disabled()
-                            ->dehydrated()
-                            ->unique(Product::class, 'slug', ignoreRecord: true)
-                            ->required(),
-                        MarkdownEditor::make('description')
+                        MarkdownEditor::make('specification')
                             ->columnSpanFull()
-                            ->fileAttachmentsDirectory('products')
                     ])->columns(2),
                     Section::make('Изображение')->schema([
                         FileUpload::make('images')
-                            ->multiple()
-                            ->directory('products')
-                            ->maxFiles(5)
-                            ->reorderable()
+                            ->image()
+                            ->directory('models')
+                            ->required(),
                     ])->columnSpanFull()
                 ])->columnSpan(2),
                 Group::make()->schema([
@@ -81,13 +73,6 @@ class ProductResource extends Resource
                             ->placeholder('Выбрать категорию')
                             ->label('Выберите категорию')
                             ->relationship('category', 'name')
-                            ->required(),
-                        Select::make('brand_id')
-                            ->preload()
-                            ->searchable()
-                            ->label('Выберите бред')
-                            ->placeholder('Выбрать бренд')
-                            ->relationship('brand', 'name')
                             ->required(),
                     ])->columnSpanFull(),
                     Section::make('Цена')->schema([
@@ -104,13 +89,6 @@ class ProductResource extends Resource
                         Toggle::make('is_active')
                             ->default(true)
                             ->label('Отображать на сайте'),
-                        Toggle::make('is_stock')
-                            ->default(true)
-                            ->label('В наличии'),
-                        Toggle::make('is_featured')
-                            ->label('Популярный товар'),
-                        Toggle::make('is_sale')
-                            ->label('Акция')
                     ])->columnSpanFull(),
                 ])->columnSpan(1)
             ])->columns(3);
@@ -122,31 +100,16 @@ class ProductResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('slug'),
                 TextColumn::make('category.name')
-                    ->sortable(),
-                TextColumn::make('brand.name')
                     ->sortable(),
                 TextColumn::make('price')
                     ->money('RUB')
                     ->sortable(),
+                ImageColumn::make('images'),
                 IconColumn::make('is_active')
                     ->boolean(),
-                IconColumn::make('is_stock')
-                    ->boolean(),
-                IconColumn::make('is_featured')
-                    ->boolean(),
-                IconColumn::make('is_sale')
-                    ->boolean(),
             ])
-            ->filters([
-                SelectFilter::make('category')
-                    ->label('Категория')
-                    ->relationship('category', 'name'),
-                SelectFilter::make('brand')
-                    ->label('Бренд')
-                    ->relationship('brand', 'name'),
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),

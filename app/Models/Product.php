@@ -11,20 +11,10 @@ class Product extends Model
 
     protected $fillable = [
         'category_id',
-        'brand_id',
         'name',
-        'slug',
         'images',
-        'description',
-        'price',
-        'is_active',
-        'is_stock',
-        'is_featured',
-        'is_sale'
-    ];
-
-    protected $casts = [
-        'images' => 'array'
+        'specification',
+        'price'
     ];
 
     public function category()
@@ -32,13 +22,5 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
+   
 }

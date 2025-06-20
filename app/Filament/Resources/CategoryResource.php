@@ -31,11 +31,11 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationLabel = "Категории";
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
     protected static ?string $modelLabel = 'Категория';
     
     protected static ?string $pluralModelLabel = 'Категории';
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
