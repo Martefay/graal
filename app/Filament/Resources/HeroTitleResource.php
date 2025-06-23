@@ -6,6 +6,7 @@ use App\Filament\Resources\HeroTitleResource\Pages;
 use App\Filament\Resources\HeroTitleResource\RelationManagers;
 use App\Models\HeroTitle;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class HeroTitleResource extends Resource
 {
     protected static ?string $model = HeroTitle::class;
+
+    protected static ?string $navigationGroup = 'Главная';
 
       protected static ?string $modelLabel = 'Главный заголовок';
     
@@ -40,6 +43,11 @@ class HeroTitleResource extends Resource
                 ->label('Описание')
                 ->columnSpanFull()
                 ->required(),
+                FileUpload::make('image')
+                ->label('Баннер')
+                ->image()
+                ->directory('herobanners')
+                ->required()
             ]);
     }
 
@@ -47,6 +55,8 @@ class HeroTitleResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('image')
+                ->label('Баннер'),
                  TextColumn::make('title')
                 ->label('Заголовок'),
                 TextColumn::make('description')

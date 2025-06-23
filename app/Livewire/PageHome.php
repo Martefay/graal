@@ -15,12 +15,5 @@ class PageHome extends Component
 {
 
 
-    public function render()
-    {
-        $categories = Category::paginate(4);
-        return view('livewire.page-home', [
-            'categories' => $categories,
-        ]);
-    }
     
 }

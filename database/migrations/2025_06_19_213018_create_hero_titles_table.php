@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('hero_titles', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
+            $table->text('image');
             $table->timestamps();
         });
     }

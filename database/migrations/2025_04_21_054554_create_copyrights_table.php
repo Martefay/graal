@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('copyrights', function (Blueprint $table) {
             $table->id();
-            $table->string('text');
+            $table->text('text');
             $table->timestamps();
         });
     }

@@ -38,9 +38,10 @@ class BenefitResource extends Resource
                 TextInput::make('title')
                 ->label('Заголовок')
                 ->required(),
-                MarkdownEditor::make('description')
-                ->label('Описание')
-                ->columnSpanFull()
+                FileUpload::make('image')
+                ->label('Картинка')
+                ->image()
+                ->directory('benefits')
                 ->required(),
             ]);
     }
@@ -51,8 +52,8 @@ class BenefitResource extends Resource
             ->columns([
                 TextColumn::make('title')
                 ->label('Заголовок'),
-                TextColumn::make('description')
-                ->label('Описание'),
+                ImageColumn::make('image')
+                ->label('Картинка'),
             ])
             ->filters([
                 //

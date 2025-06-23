@@ -7,9 +7,8 @@
     @stack('meta')
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="{{asset('assets/js/app.js')}}"></script>
-    {{-- <script defer src="{{asset('/assets/js/main.js')}}"></script>
-    <script defer src="{{ asset('assets/js/graph-modal.js') }}"></script> --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="icon" href="{{ asset('assets/image/circular_logo.png') }}" type="image/x-icon">
+       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
    
@@ -28,6 +27,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 <body class="bg-black text-white">
+    <div id="preloader" class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-500 object-cover bg-[url({{ asset('assets/image/BG.png') }})]">
+    <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#FFDBA9] border-t-transparent"></div>
+</div>
     <style>
 html {
     scroll-behavior: smooth;
@@ -46,6 +48,130 @@ input::-webkit-calendar-picker-indicator {
     from{transform: translateY(0); opacity: 0;}
     to{transform: translateY(0); opacity: 1;}
 }
+
+ .swiper-button-next,
+    .swiper-button-prev {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 12px;
+      border-radius: 9999px;
+      color: white;
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+      font-size: 18px;
+    }
+
+
+    .slider-container {
+            width: 100%;
+            padding: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .swiper {
+            width: 100%;
+            height: 100%;
+            padding: 10px 0;
+        }
+        
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .card {
+            width: 350px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(102, 0, 102, 0.2);
+            backdrop-filter: blur(5px);
+            color: white;
+            font-size: 21px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .card:hover .card-overlay {
+            opacity: 1;
+        }
+        
+        
+        
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+      
+        
+        @media (max-width: 767px) {
+            
+            
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none;
+            }
+        }
+
+         @media (max-width: 1199px) {
+            .card {
+                width: 300px;
+                height: 380px;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .card {
+                width: 280px;
+                height: 360px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .card {
+                width: 260px;
+                height: 340px;
+            }
+            
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 575px) {
+            .card {
+                width: 240px;
+                height: 320px;
+            }
+        }
+
+         
     </style>
     <livewire:partials.header />
     <main id="main">
@@ -145,6 +271,66 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     }
 });
+
+let labels = document.querySelectorAll('label');
+labels.forEach((label)=>{
+  label.style.color='white';
+});
+
+ document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper('.mySwiper', {
+                slidesPerView: 'auto',
+                centeredSlides: false,
+                spaceBetween: 20,
+                loop: true,
+                speed: 800,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+               breakpoints: {
+                    320: {
+                        slidesPerView: 1,
+                        spaceBetween: 8,  // Уменьшено расстояние для мобильных
+                        centeredSlides: true
+                    },
+                    400: {
+                        slidesPerView: 1,
+                        spaceBetween: 10,
+                        centeredSlides: true
+                    },
+                    576: {
+                        slidesPerView: 2,
+                        spaceBetween: 12
+                    },
+                    768: {
+                        slidesPerView: 2,
+                        spaceBetween: 15
+                    },
+                    992: {
+                        slidesPerView: 3,
+                        spaceBetween: 18
+                    },
+                    1200: {
+                        slidesPerView: 4,
+                        spaceBetween: 20
+                    }
+                }
+            });
+        });
+
+        window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+        preloader.classList.add('opacity-0');
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 500); // дожидаемся анимации исчезновения
+    });
     </script>
+
 </body>
 </html>

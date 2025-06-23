@@ -47,11 +47,7 @@ class LogoResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image'),
-                TextColumn::make('created_at')
-                    ->sortable()
-                    ->date()
-                    ->toggleable(isToggledHiddenByDefault:true),
+                
             ])
             ->filters([
                 //

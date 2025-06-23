@@ -22,6 +22,8 @@ class HeroSectionResource extends Resource
 {
     protected static ?string $model = HeroSection::class;
 
+    protected static ?string $navigationGroup = 'Главная';
+
     protected static ?string $navigationLabel = 'Первая секция';
 
     protected static ?string $pluralModelLabel = 'Первая секция';
@@ -44,7 +46,8 @@ class HeroSectionResource extends Resource
                 FileUpload::make('image')
                 ->label('Картинка')
                 ->image()
-                ->directory('herosections')
+                             ->columnSpanFull()
+       
                 ->required(),
             ]);
     }
@@ -57,7 +60,7 @@ class HeroSectionResource extends Resource
                 ->label('Заголовок'),
                 TextColumn::make('description')
                 ->label('Описание'),
-                ImageColumn::make('image')
+                
             ])
             ->filters([
                 //

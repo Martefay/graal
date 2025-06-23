@@ -56,6 +56,7 @@ class CategoryMenuResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                ->label('Название категории')
                     ->searchable(),
                     TextColumn::make('created_at')
                     ->sortable()

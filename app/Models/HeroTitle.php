@@ -11,7 +11,8 @@ class HeroTitle extends Model
 
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'image'
     ];
 
     public function herotitles() {

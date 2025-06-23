@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Models\About;
-use App\Models\address;
+use App\Models\Address;
 use App\Models\Benefit;
 use App\Models\Category;
 use App\Models\CategoryMenu;
@@ -15,6 +15,7 @@ use App\Models\HeroTitle;
 use App\Models\Logo;
 use App\Models\Menu;
 use App\Models\Phone;
+use App\Models\Place;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Specification;
@@ -39,10 +40,7 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
 
-     public function mount($category_id)
-    {
-        $this->category_id = $category_id;
-    }
+   
     
     public function render($categorymenus)
     {
@@ -70,11 +68,8 @@ class AppServiceProvider extends ServiceProvider
             $phones = Phone::get();
             $view->with('phones', $phones);
 
-            $addresses = address::get();
+            $addresses = Address::get();
             $view->with('addresses', $addresses);
-
-            $contactfooters = ContactFooter::get();
-            $view->with('contactfooters', $contactfooters);
 
             $copyrights = Copyright::get();
             $view->with('copyrights', $copyrights);
@@ -91,8 +86,8 @@ class AppServiceProvider extends ServiceProvider
             $herotitles = HeroTitle::get();
             $view->with('herotitles', $herotitles);
 
-            $services = Service::get();
-            $view->with('services', $services);
+            $places = Place::get();
+            $view->with('places', $places);
 
             
 
@@ -118,7 +113,7 @@ class AppServiceProvider extends ServiceProvider
             // $specifications = Specification::get();
             // $view->with('specifications', $specifications);
 
-            $category = Category::get();
+         
 
             // $products = Product::where('category_id', $this->category_id)->get();
             // $view->with('products', $products);

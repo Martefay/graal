@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('logos', function (Blueprint $table) {
             $table->id();
-            $table->json('image');
+            $table->text('image');
             $table->timestamps();
         });
     }

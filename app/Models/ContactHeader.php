@@ -43,7 +43,7 @@ class ContactHeader extends Model
     public function addresses(): HasMany
     {
         // Если используется стандартное имя внешнего ключа (contact_header_id)
-        return $this->hasMany(address::class);
+        return $this->hasMany(Address::class);
         
         // ИЛИ если используется кастомное имя (например, contact_id)
         // return $this->hasMany(Phone::class, 'contact_id');
